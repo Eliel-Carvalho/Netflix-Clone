@@ -33,3 +33,28 @@
 .movieRow--item img:hover{
     transform: scale(1);
 }
+
+.movieRow--left, .movieRow--rigth{
+    position: absolute;
+    width: 40px;
+    height: 225px;
+
+    background-color: rgb(0, 0, 0, 0.6);
+    z-index: 99;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+    cursor: pointer;
+    opacity: 0;
+}
+
+.movieRow--left{
+    left: 0;
+}
+
+.movieRow--rigth{
+    right: 0;
+}

@@ -2,13 +2,16 @@ import React, {useEffect, useState} from "react"
 import FeaturedMovie from "./components/FeaturedMovie"
 import MovieRow from "./components/movieRow"
 import Tmdb from "./tmdb"
+import Header from './components/Header'
 
 import "./app.css"
+import tmdb from "./tmdb"
 
 function App() {
 
   const [movieList, setMovieList] = useState([])
   const [featuredData, setFeaturedData] = useState(null)
+  const [blackHeader, setBlackHeader] = useState(false)
 
   useEffect(() => {
     //PEGAR LISTA TOTAL
@@ -17,18 +20,38 @@ function App() {
       setMovieList(list)
 
       //PEGAR FILME DESTAQUE
-      let originals = list.filter(i=>i.slug === 'originals')
-      let randomChosen = Math.floor(Math.random() * (originals[0].items.results.length - 1)) //gerando numero aleatorio
-      let chosen = originals[0].items.results[randomChosen]
+      let originals = list.filter(i => i.slug === 'originals')
+      let randomchosen = Math.floor(Math.random() * (originals[0].items.results.length - 1))
+      let chosen = originals[0].items.results[randomchosen] //gerando munero aleatorio
+      let choseninfo = await tmdb.getMovieInfo(chosen.id, 'tv')
 
-      console.log(chosen)
+      setFeaturedData(choseninfo)
     }
 
     loadAll()
   }, [])
 
+  useEffect(() => {
+    const scrollListener = () => {
+      if(window.scrollY > 10){
+        setBlackHeader(true)
+      }else{
+        setBlackHeader(false)
+      }
+    }
+
+    window.addEventListener('scroll', scrollListener)
+
+    return () => {
+      window.addEventListener('scroll', scrollListener)
+    }
+  }, [])
+
   return (
     <div className="page">
+
+      <Header black={blackHeader}/>
+
       {featuredData && 
         <FeaturedMovie item={featuredData}/>
       }
@@ -39,6 +62,9 @@ function App() {
            <MovieRow key={key} title={item.title} items={item.items}/>
           ))}
       </section>
+
+      <footer>Direito de Imagem para a Netflix <br />
+      Dados pegos do site Themoviedb.org</footer>
     </div>
   )
 }
