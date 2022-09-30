@@ -4,6 +4,8 @@ import MovieRow from "./components/movieRow"
 import Tmdb from "./tmdb"
 import Header from './components/Header'
 
+import Loading from './assets/Netflix_LoadTime.gif'
+
 import "./app.css"
 import tmdb from "./tmdb"
 
@@ -65,6 +67,12 @@ function App() {
 
       <footer>Direito de Imagem para a Netflix <br />
       Dados pegos do site Themoviedb.org</footer>
+
+      {movieList.length <= 0 &&    
+        <div className="loading">
+          <img src={Loading}  alt="carregando" />
+        </div>
+      }
     </div>
   )
 }
